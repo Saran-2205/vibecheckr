@@ -1,11 +1,8 @@
 "use client"
 import { useState, useEffect } from "react";
-import { io } from "socket.io-client";
 import { motion, AnimatePresence } from "framer-motion";
 import { Zap, Clock, Trophy, Play, Skull, Flame } from "lucide-react";
-
-// Initialize at module level so Next.js Fast Refresh doesn't break it
-const socket = io(process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000", { autoConnect: false });
+import { socket } from "@/lib/socket";
 
 // Helper array for option colors (Kahoot style)
 const OPTION_COLORS = [
