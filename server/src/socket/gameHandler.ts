@@ -1,5 +1,5 @@
 import { Server, Socket } from "socket.io";
-import { createRoom, getRoom, joinRoom } from "../rooms/roomManager";
+import { createRoom, getRoom, joinRoom, findRoomByPlayer, removePlayer } from "../rooms/roomManager";
 
 type CreateRoomPayLoad = {
   name: string;
@@ -166,5 +166,19 @@ export function gameHandler(io: Server, socket: Socket) {
     }
 
     cb({ success: true });
+  });
+
+  socket.on("disconnect", () => {
+    const room = findRoomByPlayer(socket.id);
+    if (room) {
+      const remaining = removePlayer(room.roomId, socket.id);
+      if (remaining && remaining > 0) {
+        io.to(room.roomId).emit("playerDisconnected");
+        if (room.timer) {
+          clearInterval(room.timer);
+          room.timer = null;
+        }
+      }
+    }
   });
 }
