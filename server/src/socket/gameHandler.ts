@@ -157,10 +157,15 @@ export function gameHandler(io: Server, socket: Socket) {
           });
           startTimer(io, roomId);
         } else {
-          // game over
-          io.to(roomId).emit("gameOver", {
-            finalScore: room.score,
-          });
+          if ((room.score) >= 90) {
+            io.to(roomId).emit("gameWon", {
+              finalScore: room.score,
+            })
+          } else {
+            io.to(roomId).emit("gameOver", {
+              finalScore: room.score,
+            });
+          }
         }
       }, 4000); // 4 seconds delay
     }

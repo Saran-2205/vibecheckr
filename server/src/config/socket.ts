@@ -9,7 +9,7 @@ export function setupSocket(server: http.Server){
         }
     });
     io.on("connection",(socket)=>{
-        console.log("User Connected", socket.id);
+        console.log("User Connected :", socket.id);
         gameHandler(io,socket);
     })
 }
